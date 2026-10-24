@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 5s
+  scrape_timeout: 4s
+
+scrape_configs:
+  - job_name: hw1-service
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - service-dc-a-1:8080
+          - service-dc-a-2:8080
+          - service-dc-b-1:8080
+          - service-dc-b-2:8080
