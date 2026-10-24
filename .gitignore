@@ -1,0 +1,28 @@
+# build
+target/
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# local config & secrets
+.env
+.secrets/*
+!.secrets/*.example
+
+# local convenience, deliberately not part of the repository:
+# the stand is built and run through docker compose, which needs none of these
+.env.example
+.gitattributes
+mvnw
+mvnw.cmd
+.mvn/

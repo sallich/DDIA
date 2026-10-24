@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: ${INSTANCE_DEPLOYMENT:hw1-demo-service}
+  main:
+    banner-mode: off
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+  shutdown: graceful
+
+# Instance attributes come from outside (docker-compose); the values here are local defaults.
+# Read by the application itself (InstanceProperties -> /actuator/info).
+instance:
+  pod: ${INSTANCE_POD:local-0}
+  datacenter: ${INSTANCE_DATACENTER:local}
+  deployment: ${INSTANCE_DEPLOYMENT:hw1-demo-service}
+
+# The same values bridged into the metrics-lib namespace.
+# The library owns its own prefix and knows nothing about the application env variable names.
+ddia:
+  metrics:
+    instance:
+      pod: ${INSTANCE_POD:local-0}
+      datacenter: ${INSTANCE_DATACENTER:local}
+      deployment: ${INSTANCE_DEPLOYMENT:hw1-demo-service}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # health     - health probe used by docker-compose
+        # info       - confirms the instance env variables arrived
+        # prometheus - metrics exposition, scraped by VictoriaMetrics
+        # measured   - list of instrumented handlers for the dashboard generator
+        include: health,info,prometheus,measured
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+
+logging:
+  level:
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level [${INSTANCE_DATACENTER:local}/${INSTANCE_POD:local-0}] %logger{36} - %msg%n"
